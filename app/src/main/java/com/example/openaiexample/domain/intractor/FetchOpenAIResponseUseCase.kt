@@ -1,6 +1,6 @@
 package com.example.openaiexample.domain.intractor
 
-import com.example.openaiexample.domain.OpenAIRepository
+import com.example.openaiexample.domain.repository.remote.OpenAIRepository
 import javax.inject.Inject
 
 class FetchOpenAIResponseUseCase @Inject constructor(

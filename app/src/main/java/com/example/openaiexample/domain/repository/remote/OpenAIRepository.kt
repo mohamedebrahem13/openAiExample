@@ -1,4 +1,4 @@
-package com.example.openaiexample.domain
+package com.example.openaiexample.domain.repository.remote
 
 
 interface OpenAIRepository {

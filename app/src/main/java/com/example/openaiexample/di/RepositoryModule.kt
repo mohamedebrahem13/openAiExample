@@ -2,7 +2,7 @@ package com.example.openaiexample.di
 
 import com.example.openaiexample.data.repository.OpenAIRepositoryImpl
 import com.example.openaiexample.data.repository.remote.OpenAIService
-import com.example.openaiexample.domain.OpenAIRepository
+import com.example.openaiexample.domain.repository.remote.OpenAIRepository
 import com.example.openaiexample.domain.intractor.FetchOpenAIResponseUseCase
 import dagger.Module
 import dagger.Provides
