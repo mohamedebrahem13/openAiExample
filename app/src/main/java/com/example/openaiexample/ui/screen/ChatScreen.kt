@@ -27,10 +27,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.openaiexample.ui.viewmodels.OpenAIViewModel
 import androidx.compose.ui.graphics.Color // Add this import
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +42,9 @@ fun ChatScreen(viewModel: OpenAIViewModel = hiltViewModel()) {
     val response by viewModel.response.collectAsState()
     var userMessage by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
+    var isFocused by remember { mutableStateOf(false) } // Track focus state
+
+    val focusRequester = remember { FocusRequester() }
 
     // Observe changes in the ViewModel and update the UI
     LaunchedEffect(response) {
@@ -59,11 +66,11 @@ fun ChatScreen(viewModel: OpenAIViewModel = hiltViewModel()) {
             BottomAppBar(
                 modifier = Modifier.fillMaxWidth(),
                 containerColor = Color.Transparent // Remove background by setting it to transparent
-
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth().padding(horizontal = 16.dp),
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // User input field
@@ -71,16 +78,27 @@ fun ChatScreen(viewModel: OpenAIViewModel = hiltViewModel()) {
                         value = userMessage,
                         onValueChange = { userMessage = it },
                         modifier = Modifier
+                            .focusRequester(focusRequester)
+                            .onFocusChanged { state -> isFocused = state.isFocused } // Track focus state
                             .weight(1f) // Let it fill the available space
-                            .border(1.dp, MaterialTheme.colorScheme.primary, shape = CircleShape) // Circular border
+                            .border(
+                                width = if (isFocused) 2.dp else 1.dp, // Change the border width based on focus state
+                                if (isFocused) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                                shape = CircleShape
+                            ) // Dynamic border color based on focus state
                             .padding(16.dp),
                         decorationBox = { innerTextField ->
                             if (userMessage.isEmpty()) {
-                                Text("Talk to Ai", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)) // Hint text
+                                Text(
+                                    "Talk to AI",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) // Hint text
+                                )
                             }
                             innerTextField() // Actual text field content
                         }
                     )
+
                     Spacer(modifier = Modifier.width(8.dp)) // Spacer between input field and button
 
                     // Send button
