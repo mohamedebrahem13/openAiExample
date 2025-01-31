@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.openaiexample.ui.viewmodels.OpenAIViewModel
+import androidx.compose.ui.graphics.Color // Add this import
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,12 +57,13 @@ fun ChatScreen(viewModel: OpenAIViewModel = hiltViewModel()) {
         bottomBar = {
             // BottomAppBar
             BottomAppBar(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                containerColor = Color.Transparent // Remove background by setting it to transparent
+
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+                        .fillMaxWidth().padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // User input field
@@ -70,11 +72,15 @@ fun ChatScreen(viewModel: OpenAIViewModel = hiltViewModel()) {
                         onValueChange = { userMessage = it },
                         modifier = Modifier
                             .weight(1f) // Let it fill the available space
-                            .height(56.dp) // Consistent height
-                            .border(1.dp, MaterialTheme.colorScheme.primary)
-                            .padding(16.dp)
+                            .border(1.dp, MaterialTheme.colorScheme.primary, shape = CircleShape) // Circular border
+                            .padding(16.dp),
+                        decorationBox = { innerTextField ->
+                            if (userMessage.isEmpty()) {
+                                Text("Talk to Ai", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)) // Hint text
+                            }
+                            innerTextField() // Actual text field content
+                        }
                     )
-
                     Spacer(modifier = Modifier.width(8.dp)) // Spacer between input field and button
 
                     // Send button
