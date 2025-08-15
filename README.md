@@ -1,5 +1,5 @@
 <div style="display: flex; align-items: center;">
-    <img src="https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25" alt="Image" size="100" style="margin-right: 8px;">
+    <img src="https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25">
     <strong>Download Cineverse APK</strong>
 </div>
 
